@@ -15,15 +15,14 @@ class BookListController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool hasMore = true.obs;
   String? nextUrl;
-  String? currentTopic;
+  String? currentTopic; // This will now hold the translated category name
   String? currentSearchQuery;
 
   @override
   void onInit() {
     super.onInit();
-    // Get the category passed from the previous page
     if (Get.arguments != null && Get.arguments['category'] != null) {
-      currentTopic = Get.arguments['category'];
+      currentTopic = Get.arguments['category'] as String; // Already translated string
       fetchBooks();
     }
 
@@ -49,9 +48,9 @@ class BookListController extends GetxController {
     isLoading.value = true;
     try {
       final response = await getBooksUseCase.call(
-        topic: currentTopic,
+        topic: currentTopic, // This is already the translated string received from previous page
         search: currentSearchQuery,
-        mimeType: 'image', // Always filter by image mime type as per requirement
+        mimeType: 'image',
         nextUrl: isNewSearch ? null : nextUrl,
       );
 
@@ -62,7 +61,7 @@ class BookListController extends GetxController {
       nextUrl = response.next;
       hasMore.value = response.next != null;
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar('error'.tr, 'failed_to_load_books'.tr + e.toString()); // Localized error message
     } finally {
       isLoading.value = false;
     }
@@ -70,14 +69,13 @@ class BookListController extends GetxController {
 
   void searchBooks(String query) {
     currentSearchQuery = query;
-    hasMore.value = true; // Reset hasMore for new search
-    nextUrl = null; // Reset nextUrl for new search
+    hasMore.value = true;
+    nextUrl = null;
     fetchBooks(isNewSearch: true);
   }
 
   Future<void> openBookLink(Book book) async {
     String? viewableUrl;
-    // Prioritize HTML, then PDF, then TXT
     if (book.formats.containsKey('text/html')) {
       viewableUrl = book.formats['text/html'];
     } else if (book.formats.containsKey('application/pdf')) {
@@ -88,17 +86,17 @@ class BookListController extends GetxController {
       viewableUrl = book.formats['text/plain'];
     }
 
-    // Caveat 1: Zip files are NOT viewable files.
     if (viewableUrl != null && !viewableUrl.endsWith('.zip')) {
-      if (await canLaunchUrl(Uri.parse(viewableUrl))) {
-        await launchUrl(Uri.parse(viewableUrl));
+      final Uri uri = Uri.parse(viewableUrl);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
       } else {
-        Get.snackbar('Error', 'Could not launch $viewableUrl');
+        Get.snackbar('error'.tr, 'could_not_launch_url'.tr + viewableUrl); // Localized error message
       }
     } else {
       Get.defaultDialog(
-        title: 'Error',
-        middleText: 'No viewable version available',
+        title: 'error'.tr,
+        middleText: 'no_viewable_version_available'.tr,
       );
     }
   }

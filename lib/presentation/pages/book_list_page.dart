@@ -13,38 +13,32 @@ class BookListPage extends GetView<BookListController> {
     final textTheme = Theme.of(context).textTheme;
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    // Determine crossAxisCount based on screen width
-    int crossAxisCount = 2; // Default for smaller screens
+    int crossAxisCount = 2;
     if (screenWidth > 400 && screenWidth <= 600) {
       crossAxisCount = 3;
     } else if (screenWidth > 600 && screenWidth <= 900) {
       crossAxisCount = 4;
     } else if (screenWidth > 900) {
-      crossAxisCount = 5; // For very large screens/web
+      crossAxisCount = 5;
     }
-
-    // Calculate childAspectRatio based on fixed item width (90+padding) and height (140+text height+padding)
-    // Rough estimation: card width ~114, card height ~ (140 + 8 + 2*12 + 4) = ~186
-    // childAspectRatio = effectiveItemWidth / effectiveItemHeight
-    // Let's go with a fixed aspect ratio that looks good for the screenshot's proportions
     final double childAspectRatio = 0.6; // Adjusted for cover + 2 lines of text below
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundLight, // White background
-        foregroundColor: AppColors.primary, // Purple icon and text
+        backgroundColor: AppColors.backgroundLight,
+        foregroundColor: AppColors.primary,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // Back arrow
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Get.back(),
         ),
         title: Text(
           controller.currentTopic != null
-              ? '${controller.currentTopic}'
-              : 'All Books',
-          style: textTheme.displayMedium?.copyWith(color: AppColors.primary), // Heading 2 style for title
+              ? controller.currentTopic! // currentTopic is already translated string
+              : 'all_books_title'.tr,
+          style: textTheme.displayMedium?.copyWith(color: AppColors.primary),
         ),
-        centerTitle: false, // Align title to left as per screenshot
-        elevation: 0, // No shadow
+        centerTitle: false,
+        elevation: 0,
       ),
       body: Column(
         children: [
@@ -53,18 +47,11 @@ class BookListPage extends GetView<BookListController> {
             child: TextField(
               onSubmitted: (query) => controller.searchBooks(query),
               decoration: InputDecoration(
-                hintText: 'Search',
+                hintText: 'search_hint'.tr,
                 prefixIcon: const Icon(Icons.search, color: AppColors.greyMedium),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: AppColors.greyLight, // Search bar background color
-                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                hintStyle: textTheme.bodyLarge?.copyWith(color: AppColors.greyMedium), // 16px Regular for hint
+                hintStyle: textTheme.bodyLarge?.copyWith(color: AppColors.greyMedium),
               ),
-              style: textTheme.bodyLarge, // 16px Regular for input text
+              style: textTheme.bodyLarge,
             ),
           ),
           Expanded(
@@ -72,16 +59,16 @@ class BookListPage extends GetView<BookListController> {
               if (controller.isLoading.value && controller.books.isEmpty) {
                 return const Center(child: CircularProgressIndicator());
               } else if (controller.books.isEmpty && !controller.isLoading.value) {
-                return Center(child: Text('No books found.', style: textTheme.bodyLarge));
+                return Center(child: Text('no_books_found'.tr, style: textTheme.bodyLarge));
               } else {
                 return GridView.builder(
                   controller: controller.scrollController,
-                  padding: const EdgeInsets.all(16.0), // Padding around the grid
+                  padding: const EdgeInsets.all(16.0),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 16.0, // Spacing between columns
-                    mainAxisSpacing: 16.0, // Spacing between rows
-                    childAspectRatio: childAspectRatio, // Use calculated aspect ratio
+                    crossAxisSpacing: 16.0,
+                    mainAxisSpacing: 16.0,
+                    childAspectRatio: childAspectRatio,
                   ),
                   itemCount: controller.books.length + (controller.hasMore.value ? 1 : 0),
                   itemBuilder: (context, index) {

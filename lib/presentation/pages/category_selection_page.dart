@@ -17,11 +17,10 @@ class CategorySelectionPage extends GetView<CategorySelectionController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gutendex Books'),
+        title: Text('app_title'.tr),
       ),
       body: Stack(
         children: [
-          // Background SVG image
           Positioned.fill(
             child: SvgPicture.asset(
               'assets/images/Pattern.svg',
@@ -35,13 +34,23 @@ class CategorySelectionPage extends GetView<CategorySelectionController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Gutenberg Project',
+                  'gutenberg_project_title'.tr,
                   style: textTheme.displayMedium?.copyWith(color: AppColors.primary),
                 ),
                 const SizedBox(height: 8.0),
                 Text(
-                  'A social cataloging website that allows you to freely search its database of books, annotations, and reviews.',
+                  'gutenberg_project_subtitle'.tr,
                   style: textTheme.bodyLarge?.copyWith(color: AppColors.greyDark),
+                ),
+                const SizedBox(height: 24.0),
+                Text(
+                  'explore_books_by_genre'.tr,
+                  style: textTheme.displayMedium?.copyWith(color: AppColors.greyDark, fontSize: 28), // Adjust size if needed
+                ),
+                const SizedBox(height: 8.0),
+                Text(
+                  'select_category_to_read'.tr,
+                  style: textTheme.bodyLarge?.copyWith(color: AppColors.greyMedium), // Body style for subtitle
                 ),
                 const SizedBox(height: 24.0),
                 Expanded(
@@ -53,10 +62,10 @@ class CategorySelectionPage extends GetView<CategorySelectionController> {
                             mainAxisSpacing: 16.0,
                             childAspectRatio: 3 / 0.8,
                           ),
-                          itemCount: controller.bookCategories.length,
+                          itemCount: controller.categoryKeys.length, // Use categoryKeys
                           itemBuilder: (context, index) {
-                            final category = controller.bookCategories[index];
-                            final String? svgPath = controller.getSvgAssetForCategory(category);
+                            final String categoryKey = controller.categoryKeys[index];
+                            final String? svgPath = controller.getSvgAssetForCategory(categoryKey);
                             final Widget leadingIconWidget = svgPath != null
                                 ? SvgPicture.asset(
                                     svgPath,
@@ -65,25 +74,25 @@ class CategorySelectionPage extends GetView<CategorySelectionController> {
                                     colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
                                   )
                                 : SvgPicture.asset(
-                                    'assets/images/default_book.svg', // Fallback to default_book.svg
+                                    'assets/images/default_book.svg',
                                     height: 24,
                                     width: 24,
                                     colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
                                   );
 
                             return CategoryCard(
-                              categoryName: category,
-                              onTap: () => controller.selectCategory(category),
+                              categoryName: categoryKey.tr, // Translate category name
+                              onTap: () => controller.selectCategory(categoryKey), // Pass key
                               leadingVisual: leadingIconWidget,
                               isGridView: true,
                             );
                           },
                         )
                       : ListView.builder(
-                          itemCount: controller.bookCategories.length,
+                          itemCount: controller.categoryKeys.length, // Use categoryKeys
                           itemBuilder: (context, index) {
-                            final category = controller.bookCategories[index];
-                            final String? svgPath = controller.getSvgAssetForCategory(category);
+                            final String categoryKey = controller.categoryKeys[index];
+                            final String? svgPath = controller.getSvgAssetForCategory(categoryKey);
                             final Widget leadingIconWidget = svgPath != null
                                 ? SvgPicture.asset(
                                     svgPath,
@@ -92,7 +101,7 @@ class CategorySelectionPage extends GetView<CategorySelectionController> {
                                     colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
                                   )
                                 : SvgPicture.asset(
-                                    'assets/images/default_book.svg', // Fallback to default_book.svg
+                                    'assets/images/default_book.svg',
                                     height: 24,
                                     width: 24,
                                     colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
@@ -101,8 +110,8 @@ class CategorySelectionPage extends GetView<CategorySelectionController> {
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
                               child: CategoryCard(
-                                categoryName: category,
-                                onTap: () => controller.selectCategory(category),
+                                categoryName: categoryKey.tr, // Translate category name
+                                onTap: () => controller.selectCategory(categoryKey), // Pass key
                                 leadingVisual: leadingIconWidget,
                                 isGridView: false,
                               ),
