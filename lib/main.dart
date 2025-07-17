@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:gutendex_books_app/presentation/bindings/initial_binding.dart';
 import 'package:gutendex_books_app/presentation/pages/book_list_page.dart';
 import 'package:gutendex_books_app/presentation/pages/category_selection_page.dart';
+import 'package:gutendex_books_app/utils/app_theme.dart'; // Import AppTheme
 
 void main() {
   runApp(const MyApp());
@@ -16,10 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Gutendex Books App',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: AppTheme.lightTheme, // Use the centralized theme data
       initialBinding: InitialBinding(),
       initialRoute: '/',
       getPages: [
