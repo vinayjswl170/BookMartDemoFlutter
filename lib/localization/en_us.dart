@@ -2,8 +2,6 @@ Map<String, String> enUS = {
   'app_title': 'Gutendex Books App',
   'gutenberg_project_title': 'Gutenberg Project',
   'gutenberg_project_subtitle': 'A social cataloging website that allows you to freely search its database of books, annotations, and reviews.',
-  'explore_books_by_genre': 'Explore Books by Genre',
-  'select_category_to_read': 'Select a category to find your next read.',
   'all_books_title': 'All Books',
   'search_hint': 'Search',
   'search_by_title_or_author': 'Search by title or author...',

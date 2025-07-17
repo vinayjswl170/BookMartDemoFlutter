@@ -45,12 +45,12 @@ class CategorySelectionPage extends GetView<CategorySelectionController> {
                 const SizedBox(height: 24.0),
                 Text(
                   'explore_books_by_genre'.tr,
-                  style: textTheme.displayMedium?.copyWith(color: AppColors.greyDark, fontSize: 28), // Adjust size if needed
+                  style: textTheme.displayMedium?.copyWith(color: AppColors.greyDark, fontSize: 28),
                 ),
                 const SizedBox(height: 8.0),
                 Text(
                   'select_category_to_read'.tr,
-                  style: textTheme.bodyLarge?.copyWith(color: AppColors.greyMedium), // Body style for subtitle
+                  style: textTheme.bodyLarge?.copyWith(color: AppColors.greyMedium),
                 ),
                 const SizedBox(height: 24.0),
                 Expanded(
@@ -62,56 +62,82 @@ class CategorySelectionPage extends GetView<CategorySelectionController> {
                             mainAxisSpacing: 16.0,
                             childAspectRatio: 3 / 0.8,
                           ),
-                          itemCount: controller.categoryKeys.length, // Use categoryKeys
+                          itemCount: controller.categoryKeys.length,
                           itemBuilder: (context, index) {
                             final String categoryKey = controller.categoryKeys[index];
                             final String? svgPath = controller.getSvgAssetForCategory(categoryKey);
-                            final Widget leadingIconWidget = svgPath != null
-                                ? SvgPicture.asset(
-                                    svgPath,
-                                    height: 24,
-                                    width: 24,
-                                    colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
-                                  )
-                                : SvgPicture.asset(
+
+                            Widget leadingIconWidget;
+                            if (svgPath != null) {
+                              leadingIconWidget = SvgPicture.asset(
+                                svgPath,
+                                height: 24,
+                                width: 24,
+                                colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+                                onError: (exception, stacktrace) { // Handle loading/parsing errors
+                                  debugPrint('Error loading SVG for $categoryKey: $exception');
+                                  return SvgPicture.asset(
                                     'assets/images/default_book.svg',
                                     height: 24,
                                     width: 24,
                                     colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
-                                  );
+                                  ); // Fallback to default SVG on error
+                                },
+                              );
+                            } else {
+                              leadingIconWidget = SvgPicture.asset(
+                                'assets/images/default_book.svg',
+                                height: 24,
+                                width: 24,
+                                colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+                              );
+                            }
 
                             return CategoryCard(
-                              categoryName: categoryKey.tr, // Translate category name
-                              onTap: () => controller.selectCategory(categoryKey), // Pass key
+                              categoryName: categoryKey.tr,
+                              onTap: () => controller.selectCategory(categoryKey),
                               leadingVisual: leadingIconWidget,
                               isGridView: true,
                             );
                           },
                         )
                       : ListView.builder(
-                          itemCount: controller.categoryKeys.length, // Use categoryKeys
+                          itemCount: controller.categoryKeys.length,
                           itemBuilder: (context, index) {
                             final String categoryKey = controller.categoryKeys[index];
                             final String? svgPath = controller.getSvgAssetForCategory(categoryKey);
-                            final Widget leadingIconWidget = svgPath != null
-                                ? SvgPicture.asset(
-                                    svgPath,
-                                    height: 24,
-                                    width: 24,
-                                    colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
-                                  )
-                                : SvgPicture.asset(
+
+                            Widget leadingIconWidget;
+                            if (svgPath != null) {
+                              leadingIconWidget = SvgPicture.asset(
+                                svgPath,
+                                height: 24,
+                                width: 24,
+                                colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+                                onError: (exception, stacktrace) { // Handle loading/parsing errors
+                                  debugPrint('Error loading SVG for $categoryKey: $exception');
+                                  return SvgPicture.asset(
                                     'assets/images/default_book.svg',
                                     height: 24,
                                     width: 24,
                                     colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
-                                  );
+                                  ); // Fallback to default SVG on error
+                                },
+                              );
+                            } else {
+                              leadingIconWidget = SvgPicture.asset(
+                                'assets/images/default_book.svg',
+                                height: 24,
+                                width: 24,
+                                colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+                              );
+                            }
 
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
                               child: CategoryCard(
-                                categoryName: categoryKey.tr, // Translate category name
-                                onTap: () => controller.selectCategory(categoryKey), // Pass key
+                                categoryName: categoryKey.tr,
+                                onTap: () => controller.selectCategory(categoryKey),
                                 leadingVisual: leadingIconWidget,
                                 isGridView: false,
                               ),

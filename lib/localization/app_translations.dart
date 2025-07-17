@@ -1,6 +1,6 @@
 
 import 'package:get/get.dart';
-import 'package:gutendex_books_app/localization/en_US.dart';
+import 'package:gutendex_books_app/localization/en_us.dart';
 
 class AppTranslations extends Translations {
   @override

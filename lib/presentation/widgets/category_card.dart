@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // Keep import for potential use, but widget is passed directly
 import 'package:gutendex_books_app/utils/app_colors.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -25,18 +23,14 @@ class CategoryCard extends StatelessWidget {
       color: AppColors.backgroundLight,
       elevation: 5,
       shadowColor: const Color.fromRGBO(211, 209, 238, 0.5),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(4.0),
         child: SizedBox(
           height: 50.0,
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -48,11 +42,17 @@ class CategoryCard extends StatelessWidget {
                     ],
                     Text(
                       categoryName.toUpperCase(),
-                      style: textTheme.headlineSmall?.copyWith(color: AppColors.greyDark),
+                      style: textTheme.headlineSmall?.copyWith(
+                        color: AppColors.greyDark,
+                      ),
                     ),
                   ],
                 ),
-                const Icon(Icons.arrow_forward_ios, size: 20, color: AppColors.primary),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 20,
+                  color: AppColors.primary,
+                ),
               ],
             ),
           ),
